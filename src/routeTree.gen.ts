@@ -9,12 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetRouteImport } from './routes/reset'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as MfaRouteImport } from './routes/mfa'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TaxesIndexRouteImport } from './routes/taxes.index'
+import { Route as TaxesReversementsRouteImport } from './routes/taxes.reversements'
+import { Route as TaxesListeRouteImport } from './routes/taxes.liste'
 import { Route as PaymentsWalletsRouteImport } from './routes/payments.wallets'
 import { Route as PaymentsSettlementsRouteImport } from './routes/payments.settlements'
 import { Route as PaymentsHistoryRouteImport } from './routes/payments.history'
@@ -24,12 +32,28 @@ import { Route as KycAllRouteImport } from './routes/kyc.all'
 import { Route as KycIdRouteImport } from './routes/kyc.$id'
 import { Route as BettingHistoryRouteImport } from './routes/betting.history'
 import { Route as BettingDashboardRouteImport } from './routes/betting.dashboard'
+import { Route as AuditLogsRouteImport } from './routes/audit.logs'
 import { Route as PaymentsTransactionsIdRouteImport } from './routes/payments.transactions.$id'
 import { Route as BettingDetailsIdRouteImport } from './routes/betting.details.$id'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetRoute = ResetRouteImport.update({
   id: '/reset',
   path: '/reset',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilRoute = ProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -47,14 +71,39 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlertsRoute = AlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaxesIndexRoute = TaxesIndexRouteImport.update({
+  id: '/taxes/',
+  path: '/taxes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaxesReversementsRoute = TaxesReversementsRouteImport.update({
+  id: '/taxes/reversements',
+  path: '/taxes/reversements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaxesListeRoute = TaxesListeRouteImport.update({
+  id: '/taxes/liste',
+  path: '/taxes/liste',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentsWalletsRoute = PaymentsWalletsRouteImport.update({
@@ -102,6 +151,11 @@ const BettingDashboardRoute = BettingDashboardRouteImport.update({
   path: '/betting/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuditLogsRoute = AuditLogsRouteImport.update({
+  id: '/audit/logs',
+  path: '/audit/logs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PaymentsTransactionsIdRoute = PaymentsTransactionsIdRouteImport.update({
   id: '/payments/transactions/$id',
   path: '/payments/transactions/$id',
@@ -115,11 +169,17 @@ const BettingDetailsIdRoute = BettingDetailsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/dashboard': typeof DashboardRoute
+  '/documents': typeof DocumentsRoute
   '/login': typeof LoginRoute
   '/mfa': typeof MfaRoute
   '/onboarding': typeof OnboardingRoute
+  '/profil': typeof ProfilRoute
+  '/reports': typeof ReportsRoute
   '/reset': typeof ResetRoute
+  '/settings': typeof SettingsRoute
+  '/audit/logs': typeof AuditLogsRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
   '/kyc/$id': typeof KycIdRoute
@@ -129,16 +189,25 @@ export interface FileRoutesByFullPath {
   '/payments/history': typeof PaymentsHistoryRoute
   '/payments/settlements': typeof PaymentsSettlementsRoute
   '/payments/wallets': typeof PaymentsWalletsRoute
+  '/taxes/liste': typeof TaxesListeRoute
+  '/taxes/reversements': typeof TaxesReversementsRoute
+  '/taxes/': typeof TaxesIndexRoute
   '/betting/details/$id': typeof BettingDetailsIdRoute
   '/payments/transactions/$id': typeof PaymentsTransactionsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/dashboard': typeof DashboardRoute
+  '/documents': typeof DocumentsRoute
   '/login': typeof LoginRoute
   '/mfa': typeof MfaRoute
   '/onboarding': typeof OnboardingRoute
+  '/profil': typeof ProfilRoute
+  '/reports': typeof ReportsRoute
   '/reset': typeof ResetRoute
+  '/settings': typeof SettingsRoute
+  '/audit/logs': typeof AuditLogsRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
   '/kyc/$id': typeof KycIdRoute
@@ -148,17 +217,26 @@ export interface FileRoutesByTo {
   '/payments/history': typeof PaymentsHistoryRoute
   '/payments/settlements': typeof PaymentsSettlementsRoute
   '/payments/wallets': typeof PaymentsWalletsRoute
+  '/taxes/liste': typeof TaxesListeRoute
+  '/taxes/reversements': typeof TaxesReversementsRoute
+  '/taxes': typeof TaxesIndexRoute
   '/betting/details/$id': typeof BettingDetailsIdRoute
   '/payments/transactions/$id': typeof PaymentsTransactionsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/dashboard': typeof DashboardRoute
+  '/documents': typeof DocumentsRoute
   '/login': typeof LoginRoute
   '/mfa': typeof MfaRoute
   '/onboarding': typeof OnboardingRoute
+  '/profil': typeof ProfilRoute
+  '/reports': typeof ReportsRoute
   '/reset': typeof ResetRoute
+  '/settings': typeof SettingsRoute
+  '/audit/logs': typeof AuditLogsRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
   '/kyc/$id': typeof KycIdRoute
@@ -168,6 +246,9 @@ export interface FileRoutesById {
   '/payments/history': typeof PaymentsHistoryRoute
   '/payments/settlements': typeof PaymentsSettlementsRoute
   '/payments/wallets': typeof PaymentsWalletsRoute
+  '/taxes/liste': typeof TaxesListeRoute
+  '/taxes/reversements': typeof TaxesReversementsRoute
+  '/taxes/': typeof TaxesIndexRoute
   '/betting/details/$id': typeof BettingDetailsIdRoute
   '/payments/transactions/$id': typeof PaymentsTransactionsIdRoute
 }
@@ -175,11 +256,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/alerts'
     | '/dashboard'
+    | '/documents'
     | '/login'
     | '/mfa'
     | '/onboarding'
+    | '/profil'
+    | '/reports'
     | '/reset'
+    | '/settings'
+    | '/audit/logs'
     | '/betting/dashboard'
     | '/betting/history'
     | '/kyc/$id'
@@ -189,16 +276,25 @@ export interface FileRouteTypes {
     | '/payments/history'
     | '/payments/settlements'
     | '/payments/wallets'
+    | '/taxes/liste'
+    | '/taxes/reversements'
+    | '/taxes/'
     | '/betting/details/$id'
     | '/payments/transactions/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/alerts'
     | '/dashboard'
+    | '/documents'
     | '/login'
     | '/mfa'
     | '/onboarding'
+    | '/profil'
+    | '/reports'
     | '/reset'
+    | '/settings'
+    | '/audit/logs'
     | '/betting/dashboard'
     | '/betting/history'
     | '/kyc/$id'
@@ -208,16 +304,25 @@ export interface FileRouteTypes {
     | '/payments/history'
     | '/payments/settlements'
     | '/payments/wallets'
+    | '/taxes/liste'
+    | '/taxes/reversements'
+    | '/taxes'
     | '/betting/details/$id'
     | '/payments/transactions/$id'
   id:
     | '__root__'
     | '/'
+    | '/alerts'
     | '/dashboard'
+    | '/documents'
     | '/login'
     | '/mfa'
     | '/onboarding'
+    | '/profil'
+    | '/reports'
     | '/reset'
+    | '/settings'
+    | '/audit/logs'
     | '/betting/dashboard'
     | '/betting/history'
     | '/kyc/$id'
@@ -227,17 +332,26 @@ export interface FileRouteTypes {
     | '/payments/history'
     | '/payments/settlements'
     | '/payments/wallets'
+    | '/taxes/liste'
+    | '/taxes/reversements'
+    | '/taxes/'
     | '/betting/details/$id'
     | '/payments/transactions/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlertsRoute: typeof AlertsRoute
   DashboardRoute: typeof DashboardRoute
+  DocumentsRoute: typeof DocumentsRoute
   LoginRoute: typeof LoginRoute
   MfaRoute: typeof MfaRoute
   OnboardingRoute: typeof OnboardingRoute
+  ProfilRoute: typeof ProfilRoute
+  ReportsRoute: typeof ReportsRoute
   ResetRoute: typeof ResetRoute
+  SettingsRoute: typeof SettingsRoute
+  AuditLogsRoute: typeof AuditLogsRoute
   BettingDashboardRoute: typeof BettingDashboardRoute
   BettingHistoryRoute: typeof BettingHistoryRoute
   KycIdRoute: typeof KycIdRoute
@@ -247,17 +361,41 @@ export interface RootRouteChildren {
   PaymentsHistoryRoute: typeof PaymentsHistoryRoute
   PaymentsSettlementsRoute: typeof PaymentsSettlementsRoute
   PaymentsWalletsRoute: typeof PaymentsWalletsRoute
+  TaxesListeRoute: typeof TaxesListeRoute
+  TaxesReversementsRoute: typeof TaxesReversementsRoute
+  TaxesIndexRoute: typeof TaxesIndexRoute
   BettingDetailsIdRoute: typeof BettingDetailsIdRoute
   PaymentsTransactionsIdRoute: typeof PaymentsTransactionsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset': {
       id: '/reset'
       path: '/reset'
       fullPath: '/reset'
       preLoaderRoute: typeof ResetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil': {
+      id: '/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof ProfilRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -281,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -288,11 +433,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alerts': {
+      id: '/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof AlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/taxes/': {
+      id: '/taxes/'
+      path: '/taxes'
+      fullPath: '/taxes/'
+      preLoaderRoute: typeof TaxesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/taxes/reversements': {
+      id: '/taxes/reversements'
+      path: '/taxes/reversements'
+      fullPath: '/taxes/reversements'
+      preLoaderRoute: typeof TaxesReversementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/taxes/liste': {
+      id: '/taxes/liste'
+      path: '/taxes/liste'
+      fullPath: '/taxes/liste'
+      preLoaderRoute: typeof TaxesListeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payments/wallets': {
@@ -358,6 +531,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BettingDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/audit/logs': {
+      id: '/audit/logs'
+      path: '/audit/logs'
+      fullPath: '/audit/logs'
+      preLoaderRoute: typeof AuditLogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/payments/transactions/$id': {
       id: '/payments/transactions/$id'
       path: '/payments/transactions/$id'
@@ -377,11 +557,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlertsRoute: AlertsRoute,
   DashboardRoute: DashboardRoute,
+  DocumentsRoute: DocumentsRoute,
   LoginRoute: LoginRoute,
   MfaRoute: MfaRoute,
   OnboardingRoute: OnboardingRoute,
+  ProfilRoute: ProfilRoute,
+  ReportsRoute: ReportsRoute,
   ResetRoute: ResetRoute,
+  SettingsRoute: SettingsRoute,
+  AuditLogsRoute: AuditLogsRoute,
   BettingDashboardRoute: BettingDashboardRoute,
   BettingHistoryRoute: BettingHistoryRoute,
   KycIdRoute: KycIdRoute,
@@ -391,6 +577,9 @@ const rootRouteChildren: RootRouteChildren = {
   PaymentsHistoryRoute: PaymentsHistoryRoute,
   PaymentsSettlementsRoute: PaymentsSettlementsRoute,
   PaymentsWalletsRoute: PaymentsWalletsRoute,
+  TaxesListeRoute: TaxesListeRoute,
+  TaxesReversementsRoute: TaxesReversementsRoute,
+  TaxesIndexRoute: TaxesIndexRoute,
   BettingDetailsIdRoute: BettingDetailsIdRoute,
   PaymentsTransactionsIdRoute: PaymentsTransactionsIdRoute,
 }
