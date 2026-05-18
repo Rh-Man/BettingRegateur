@@ -129,54 +129,54 @@ export function Sidebar() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative p-6 pr-0 h-screen hidden md:block">
       <aside 
         className={cn(
-          "hidden md:flex shrink-0 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border shadow-xl shadow-slate-950/10 h-screen sticky top-0 transition-all duration-300",
-          collapsed ? "md:w-16" : "md:w-64"
+          "flex shrink-0 flex-col bg-sidebar/95 backdrop-blur-xl text-sidebar-foreground border border-sidebar-border/50 shadow-2xl shadow-primary/5 rounded-2xl h-[calc(100vh-3rem)] sticky top-6 transition-all duration-300 overflow-visible",
+          collapsed ? "w-20" : "w-64"
         )}
       >
         {/* Toggle Button - Floating Arrow */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-[100] flex h-10 w-10 items-center justify-center rounded-full border-2 border-sidebar-primary bg-sidebar-primary text-sidebar-primary-foreground shadow-xl transition-all duration-200 hover:scale-110 hover:shadow-2xl hover:brightness-110"
+          className="absolute -right-4 top-8 z-[100] flex h-8 w-8 items-center justify-center rounded-full border border-border/50 bg-background text-foreground shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-primary/20 hover:text-primary focus:outline-none"
           title={collapsed ? "Agrandir la sidebar" : "Réduire la sidebar"}
         >
           {collapsed ? (
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-4 w-4" />
           ) : (
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-4 w-4" />
           )}
         </button>
 
       {/* Header - Fixed */}
-      <div className="flex items-center gap-2.5 px-4 py-4 border-b border-sidebar-border shrink-0">
+      <div className="flex items-center gap-3 px-6 py-6 border-b border-sidebar-border/50 shrink-0">
         {!collapsed && (
           <>
-            <div className="relative h-10 w-10 shrink-0">
+            <div className="relative h-10 w-10 shrink-0 rounded-xl overflow-hidden shadow-inner bg-background">
               <Image
                 src="/logo-small.png"
                 alt="Monitrix Logo"
                 fill
-                className="object-contain"
+                className="object-contain p-1"
                 priority
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-base font-semibold tracking-tight truncate">Monitrix</p>
-              <p className="text-[10px] uppercase tracking-wider text-sidebar-foreground/60">
+              <p className="text-lg font-bold tracking-tight truncate bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Monitrix</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-sidebar-foreground/50">
                 Régulation
               </p>
             </div>
           </>
         )}
         {collapsed && (
-          <div className="relative h-10 w-10 shrink-0 mx-auto">
+          <div className="relative h-10 w-10 shrink-0 mx-auto rounded-xl overflow-hidden shadow-inner bg-background">
             <Image
               src="/logo-small.png"
               alt="Monitrix Logo"
               fill
-              className="object-contain"
+              className="object-contain p-1"
               priority
             />
           </div>
@@ -185,7 +185,7 @@ export function Sidebar() {
 
       {/* Navigation - Scrollable */}
       <TooltipProvider delayDuration={0}>
-        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5 scrollbar-thin scrollbar-thumb-sidebar-border scrollbar-track-transparent">
+        <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1 scrollbar-thin scrollbar-thumb-sidebar-border scrollbar-track-transparent">
           {NAV.map((item) => {
             const Icon = item.icon;
             const active = isParentActive(item);
@@ -201,29 +201,29 @@ export function Sidebar() {
                         type="button"
                         onClick={() => setOpen((p) => ({ ...p, [item.label]: !expanded }))}
                         className={cn(
-                          "flex w-full items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                          "flex w-full items-center justify-center rounded-xl p-3 text-sm font-medium transition-all duration-300",
                           active
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                            : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                            ? "bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg shadow-primary/20 scale-105"
+                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:scale-105",
                         )}
                       >
-                        <Icon className="h-4 w-4" />
+                        <Icon className="h-5 w-5" />
                       </button>
                     ) : (
                       <Link
                         href={item.to}
                         className={cn(
-                          "flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                          "flex items-center justify-center rounded-xl p-3 text-sm font-medium transition-all duration-300",
                           active
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                            : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                            ? "bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg shadow-primary/20 scale-105"
+                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:scale-105",
                         )}
                       >
-                        <Icon className="h-4 w-4" />
+                        <Icon className="h-5 w-5" />
                       </Link>
                     )}
                   </TooltipTrigger>
-                  <TooltipContent side="right" className="font-medium">
+                  <TooltipContent side="right" className="font-semibold px-3 py-1.5 ml-2 border-border/50 shadow-xl">
                     {item.label}
                   </TooltipContent>
                 </Tooltip>
@@ -231,55 +231,61 @@ export function Sidebar() {
             }
 
             return (
-              <div key={item.label}>
+              <div key={item.label} className="mb-1">
                 {hasChildren ? (
                   <button
                     type="button"
                     onClick={() => setOpen((p) => ({ ...p, [item.label]: !expanded }))}
                     className={cn(
-                      "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                      "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-300 relative group overflow-hidden",
                       active
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                        : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                        ? "text-primary-foreground shadow-md"
+                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground",
                     )}
                   >
-                    <Icon className="h-4 w-4 shrink-0" />
-                    <span className="flex-1 text-left truncate">{item.label}</span>
+                    {active && <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-100" />}
+                    {!active && <div className="absolute inset-0 bg-sidebar-accent opacity-0 group-hover:opacity-50 transition-opacity" />}
+                    <Icon className="h-5 w-5 shrink-0 relative z-10" />
+                    <span className="flex-1 text-left truncate relative z-10">{item.label}</span>
                     <ChevronDown
-                      className={cn("h-3.5 w-3.5 shrink-0 transition-transform duration-200", expanded && "rotate-180")}
+                      className={cn("h-4 w-4 shrink-0 transition-transform duration-300 relative z-10", expanded && "rotate-180")}
                     />
                   </button>
                 ) : (
                   <Link
                     href={item.to}
                     className={cn(
-                      "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-300 relative group overflow-hidden",
                       active
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                        : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                        ? "text-primary-foreground shadow-md scale-[1.02]"
+                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:scale-[1.02]",
                     )}
                   >
-                    <Icon className="h-4 w-4 shrink-0" />
-                    <span className="truncate">{item.label}</span>
+                    {active && <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-100" />}
+                    {!active && <div className="absolute inset-0 bg-sidebar-accent opacity-0 group-hover:opacity-50 transition-opacity" />}
+                    <Icon className="h-5 w-5 shrink-0 relative z-10" />
+                    <span className="truncate relative z-10">{item.label}</span>
                   </Link>
                 )}
                 {hasChildren && expanded && (
-                  <div className="mt-1 ml-6 space-y-0.5 border-l-2 border-sidebar-border pl-3 py-1">
+                  <div className="mt-1.5 ml-5 pl-4 border-l-2 border-primary/20 space-y-1 relative">
                     {item.children!.map((c) => {
                       const a = pathname === c.to;
                       return (
-                        <Link
-                          key={c.to}
-                          href={c.to}
-                          className={cn(
-                            "block rounded-md px-2.5 py-1.5 text-xs transition-all duration-200",
-                            a
-                              ? "bg-sidebar-primary/15 text-sidebar-primary-foreground font-medium"
-                              : "text-sidebar-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent/50",
-                          )}
-                        >
-                          {c.label}
-                        </Link>
+                         <div key={c.to} className="relative">
+                          {a && <div className="absolute -left-[17px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.8)]" />}
+                          <Link
+                            href={c.to}
+                            className={cn(
+                              "block rounded-lg px-3 py-2 text-sm transition-all duration-200",
+                              a
+                                ? "text-primary font-bold bg-primary/5"
+                                : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium",
+                            )}
+                          >
+                            {c.label}
+                          </Link>
+                        </div>
                       );
                     })}
                   </div>
@@ -291,16 +297,16 @@ export function Sidebar() {
       </TooltipProvider>
 
       {/* User Section - Fixed at bottom */}
-      <div className="border-t border-sidebar-border p-3 shrink-0 bg-sidebar">
+      <div className="p-4 shrink-0 mt-auto border-t border-sidebar-border/50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             {collapsed ? (
               <button
                 type="button"
-                className="flex w-full items-center justify-center rounded-lg px-2.5 py-2 text-left transition-all duration-200 hover:bg-sidebar-accent/60"
+                className="flex w-full items-center justify-center rounded-xl p-2 transition-all duration-300 hover:bg-sidebar-accent focus:outline-none ring-2 ring-transparent hover:ring-primary/20"
               >
-                <Avatar className="h-9 w-9 border border-sidebar-border shrink-0">
-                  <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground text-xs font-semibold">
+                <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-sidebar">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-sm font-bold shadow-inner">
                     {CURRENT_USER.initials}
                   </AvatarFallback>
                 </Avatar>
@@ -308,40 +314,40 @@ export function Sidebar() {
             ) : (
               <button
                 type="button"
-                className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition-all duration-200 hover:bg-sidebar-accent/60"
+                className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-all duration-300 hover:bg-sidebar-accent focus:outline-none ring-2 ring-transparent hover:ring-primary/20 group"
               >
-                <Avatar className="h-9 w-9 border border-sidebar-border shrink-0">
-                  <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground text-xs font-semibold">
+                <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-sidebar transition-all group-hover:ring-primary/50">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-sm font-bold shadow-inner">
                     {CURRENT_USER.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{CURRENT_USER.name}</p>
-                  <p className="truncate text-xs text-sidebar-foreground/55">{CURRENT_USER.role}</p>
+                  <p className="truncate text-sm font-bold text-sidebar-foreground group-hover:text-primary transition-colors">{CURRENT_USER.name}</p>
+                  <p className="truncate text-xs font-medium text-sidebar-foreground/50">{CURRENT_USER.role}</p>
                 </div>
-                <ChevronDown className="h-4 w-4 text-sidebar-foreground/50 shrink-0" />
+                <ChevronDown className="h-4 w-4 text-sidebar-foreground/50 shrink-0 transition-transform group-hover:text-sidebar-foreground" />
               </button>
             )}
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" side="right" className="w-64">
-            <DropdownMenuLabel>
-              <div>
-                <p className="text-sm font-medium">{CURRENT_USER.name}</p>
-                <p className="mt-0.5 text-xs font-normal text-muted-foreground">
+          <DropdownMenuContent align="end" side="right" className="w-64 rounded-xl border-border/50 shadow-xl glass-card z-50">
+            <DropdownMenuLabel className="p-3">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-bold">{CURRENT_USER.name}</p>
+                <p className="text-xs font-medium text-muted-foreground">
                   {CURRENT_USER.email}
                 </p>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/profil" className="cursor-pointer">
+            <DropdownMenuSeparator className="bg-border/50" />
+            <DropdownMenuItem asChild className="p-2.5 cursor-pointer rounded-lg hover:bg-primary/10 hover:text-primary transition-colors focus:bg-primary/10 focus:text-primary">
+              <Link href="/dashboard/profil">
                 <User className="h-4 w-4 mr-2" />
-                Mon compte
+                <span className="font-semibold">Mon compte</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-border/50" />
             <DropdownMenuItem
-              className="text-destructive focus:text-destructive cursor-pointer"
+              className="text-destructive p-2.5 cursor-pointer rounded-lg hover:bg-destructive/10 transition-colors focus:bg-destructive/10 focus:text-destructive font-semibold"
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4 mr-2" />

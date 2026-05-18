@@ -93,10 +93,14 @@ export default function LoginPage() {
         </p>
       </section>
 
-      <main className="flex min-h-screen items-center justify-center app-surface p-6 lg:p-12">
-        <div className="w-full max-w-[440px]">
-          <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <div className="relative h-10 w-10">
+      <main className="flex min-h-screen items-center justify-center app-surface p-6 lg:p-12 relative overflow-hidden">
+        {/* Subtle decorative background elements for the right side */}
+        <div className="absolute top-1/4 right-10 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="w-full max-w-[440px] relative z-10">
+          <div className="mb-10 flex items-center justify-center gap-3 lg:hidden">
+            <div className="relative h-12 w-12 rounded-xl overflow-hidden shadow-inner bg-background p-1">
               <Image
                 src="/logo-small.png"
                 alt="Monitrix Logo"
@@ -106,42 +110,46 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <p className="text-lg font-semibold leading-none">Monitrix</p>
-              <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+              <p className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Monitrix</p>
+              <p className="mt-1 text-[10px] uppercase font-bold tracking-widest text-muted-foreground">
                 Régulation
               </p>
             </div>
           </div>
 
-          <Card className="border-border/70 bg-card/95 shadow-xl shadow-slate-200/70">
-            <CardContent className="p-7 sm:p-8">
-              <div className="mb-7">
-                <p className="mb-3 inline-flex rounded-md bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+          <Card className="glass-card border-border/50 shadow-2xl shadow-primary/10 relative overflow-hidden">
+            {/* Subtle top border highlight */}
+            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            
+            <CardContent className="p-8 sm:p-10">
+              <div className="mb-8">
+                <p className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary ring-1 ring-primary/20">
+                  <LockKeyhole className="h-3.5 w-3.5" />
                   Accès sécurisé
                 </p>
-                <h2 className="text-2xl font-semibold tracking-tight">Connexion</h2>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Identifiez-vous pour accéder aux tableaux de bord de supervision.
+                <h2 className="text-3xl font-bold tracking-tight">Connexion</h2>
+                <p className="mt-2.5 text-sm leading-6 text-muted-foreground">
+                  Identifiez-vous pour accéder aux tableaux de bord de supervision de <span className="font-semibold text-foreground">Monitrix</span>.
                 </p>
               </div>
 
               <form
-                className="space-y-4"
+                className="space-y-5"
                 onSubmit={(e) => {
                   e.preventDefault();
                   router.push("/auth/mfa");
                 }}
               >
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email professionnel</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Label htmlFor="email" className="font-semibold text-foreground/80">Email professionnel</Label>
+                  <div className="relative group">
+                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
                     <Input
                       id="email"
                       type="email"
                       placeholder="agent@lonase.sn"
                       autoComplete="email"
-                      className="pl-9"
+                      className="pl-10 h-11 bg-background/50 border-border/50 shadow-inner rounded-xl focus-visible:ring-primary/50 transition-all"
                       required
                     />
                   </div>
@@ -149,43 +157,42 @@ export default function LoginPage() {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
-                    <Label htmlFor="password">Mot de passe</Label>
+                    <Label htmlFor="password" className="font-semibold text-foreground/80">Mot de passe</Label>
                     <Link
                       href="/auth/reset"
-                      className="text-xs font-medium text-primary hover:underline"
+                      className="text-xs font-semibold text-primary hover:text-accent transition-colors hover:underline"
                     >
-                      Mot de passe oublié
+                      Mot de passe oublié ?
                     </Link>
                   </div>
-                  <div className="relative">
-                    <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <div className="relative group">
+                    <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
                     <Input
                       id="password"
                       type="password"
                       placeholder="••••••••"
                       autoComplete="current-password"
-                      className="pl-9"
+                      className="pl-10 h-11 bg-background/50 border-border/50 shadow-inner rounded-xl focus-visible:ring-primary/50 transition-all"
                       required
                     />
                   </div>
                 </div>
 
-                <Button type="submit" size="lg" className="w-full gap-2 px-4">
-                  <LockKeyhole className="h-4 w-4" />
+                <Button type="submit" size="lg" className="w-full gap-2 px-4 h-12 rounded-xl bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity shadow-lg shadow-primary/20 text-primary-foreground font-semibold">
                   Se connecter
                   <ArrowRight className="ml-auto h-4 w-4" />
                 </Button>
               </form>
 
-              <div className="mt-6 rounded-md border border-border/70 bg-muted/45 px-3 py-3">
-                <p className="text-center text-xs leading-5 text-muted-foreground">
-                  Accès strictement réservé au personnel autorisé. Toute activité est journalisée.
+              <div className="mt-8 rounded-xl border border-border/50 bg-background/30 backdrop-blur-sm px-4 py-3 shadow-inner">
+                <p className="text-center text-xs leading-5 text-muted-foreground font-medium">
+                  Accès strictement réservé au personnel autorisé. Toute activité est <span className="font-semibold text-foreground/70">journalisée</span>.
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <p className="mt-5 text-center text-xs text-muted-foreground">
+          <p className="mt-8 text-center text-xs font-medium text-muted-foreground transition-colors hover:text-foreground cursor-default">
             Besoin d’un accès ? Contactez l’administrateur Monitrix.
           </p>
         </div>

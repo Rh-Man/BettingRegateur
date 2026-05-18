@@ -123,9 +123,9 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6 mb-6">
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 glass-card glow-hover border-border/50">
           <CardHeader>
-            <CardTitle>Revenus par type de jeu</CardTitle>
+            <CardTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Revenus par type de jeu</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={320}>
@@ -138,16 +138,16 @@ export default function DashboardPage() {
                 />
                 <Tooltip
                   formatter={(v: number) => formatXOF(v)}
-                  contentStyle={{ borderRadius: 8, border: "1px solid hsl(var(--border))" }}
+                  contentStyle={{ borderRadius: 12, border: "1px solid hsl(var(--border)/0.5)", backgroundColor: "hsl(var(--card)/0.8)", backdropFilter: "blur(12px)", boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
                 />
                 <Bar dataKey="revenue" fill="hsl(var(--chart-1))" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="glass-card glow-hover border-border/50">
           <CardHeader>
-            <CardTitle>Répartition rapide</CardTitle>
+            <CardTitle className="text-xl font-bold">Répartition rapide</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {revenueByGameType.slice(0, 6).map((r) => {
@@ -158,8 +158,8 @@ export default function DashboardPage() {
                     <span className="text-foreground">{r.name}</span>
                     <span className="text-muted-foreground">{pct.toFixed(1)}%</span>
                   </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full" style={{ width: `${pct}%` }} />
+                  <div className="h-2.5 bg-muted rounded-full overflow-hidden shadow-inner">
+                    <div className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-1000 ease-out" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               );
@@ -168,9 +168,9 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <Card>
+      <Card className="glass-card border-border/50 shadow-xl shadow-primary/5">
         <CardHeader>
-          <CardTitle>Récapitulatif par partenaire</CardTitle>
+          <CardTitle className="text-xl font-bold">Récapitulatif par partenaire</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
