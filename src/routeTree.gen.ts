@@ -19,6 +19,9 @@ import { Route as PaymentsWalletsRouteImport } from './routes/payments.wallets'
 import { Route as PaymentsSettlementsRouteImport } from './routes/payments.settlements'
 import { Route as PaymentsHistoryRouteImport } from './routes/payments.history'
 import { Route as PaymentsDashboardRouteImport } from './routes/payments.dashboard'
+import { Route as KycPendingRouteImport } from './routes/kyc.pending'
+import { Route as KycAllRouteImport } from './routes/kyc.all'
+import { Route as KycIdRouteImport } from './routes/kyc.$id'
 import { Route as BettingHistoryRouteImport } from './routes/betting.history'
 import { Route as BettingDashboardRouteImport } from './routes/betting.dashboard'
 import { Route as PaymentsTransactionsIdRouteImport } from './routes/payments.transactions.$id'
@@ -74,6 +77,21 @@ const PaymentsDashboardRoute = PaymentsDashboardRouteImport.update({
   path: '/payments/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KycPendingRoute = KycPendingRouteImport.update({
+  id: '/kyc/pending',
+  path: '/kyc/pending',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KycAllRoute = KycAllRouteImport.update({
+  id: '/kyc/all',
+  path: '/kyc/all',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KycIdRoute = KycIdRouteImport.update({
+  id: '/kyc/$id',
+  path: '/kyc/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BettingHistoryRoute = BettingHistoryRouteImport.update({
   id: '/betting/history',
   path: '/betting/history',
@@ -104,6 +122,9 @@ export interface FileRoutesByFullPath {
   '/reset': typeof ResetRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
+  '/kyc/$id': typeof KycIdRoute
+  '/kyc/all': typeof KycAllRoute
+  '/kyc/pending': typeof KycPendingRoute
   '/payments/dashboard': typeof PaymentsDashboardRoute
   '/payments/history': typeof PaymentsHistoryRoute
   '/payments/settlements': typeof PaymentsSettlementsRoute
@@ -120,6 +141,9 @@ export interface FileRoutesByTo {
   '/reset': typeof ResetRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
+  '/kyc/$id': typeof KycIdRoute
+  '/kyc/all': typeof KycAllRoute
+  '/kyc/pending': typeof KycPendingRoute
   '/payments/dashboard': typeof PaymentsDashboardRoute
   '/payments/history': typeof PaymentsHistoryRoute
   '/payments/settlements': typeof PaymentsSettlementsRoute
@@ -137,6 +161,9 @@ export interface FileRoutesById {
   '/reset': typeof ResetRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
+  '/kyc/$id': typeof KycIdRoute
+  '/kyc/all': typeof KycAllRoute
+  '/kyc/pending': typeof KycPendingRoute
   '/payments/dashboard': typeof PaymentsDashboardRoute
   '/payments/history': typeof PaymentsHistoryRoute
   '/payments/settlements': typeof PaymentsSettlementsRoute
@@ -155,6 +182,9 @@ export interface FileRouteTypes {
     | '/reset'
     | '/betting/dashboard'
     | '/betting/history'
+    | '/kyc/$id'
+    | '/kyc/all'
+    | '/kyc/pending'
     | '/payments/dashboard'
     | '/payments/history'
     | '/payments/settlements'
@@ -171,6 +201,9 @@ export interface FileRouteTypes {
     | '/reset'
     | '/betting/dashboard'
     | '/betting/history'
+    | '/kyc/$id'
+    | '/kyc/all'
+    | '/kyc/pending'
     | '/payments/dashboard'
     | '/payments/history'
     | '/payments/settlements'
@@ -187,6 +220,9 @@ export interface FileRouteTypes {
     | '/reset'
     | '/betting/dashboard'
     | '/betting/history'
+    | '/kyc/$id'
+    | '/kyc/all'
+    | '/kyc/pending'
     | '/payments/dashboard'
     | '/payments/history'
     | '/payments/settlements'
@@ -204,6 +240,9 @@ export interface RootRouteChildren {
   ResetRoute: typeof ResetRoute
   BettingDashboardRoute: typeof BettingDashboardRoute
   BettingHistoryRoute: typeof BettingHistoryRoute
+  KycIdRoute: typeof KycIdRoute
+  KycAllRoute: typeof KycAllRoute
+  KycPendingRoute: typeof KycPendingRoute
   PaymentsDashboardRoute: typeof PaymentsDashboardRoute
   PaymentsHistoryRoute: typeof PaymentsHistoryRoute
   PaymentsSettlementsRoute: typeof PaymentsSettlementsRoute
@@ -284,6 +323,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PaymentsDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kyc/pending': {
+      id: '/kyc/pending'
+      path: '/kyc/pending'
+      fullPath: '/kyc/pending'
+      preLoaderRoute: typeof KycPendingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kyc/all': {
+      id: '/kyc/all'
+      path: '/kyc/all'
+      fullPath: '/kyc/all'
+      preLoaderRoute: typeof KycAllRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kyc/$id': {
+      id: '/kyc/$id'
+      path: '/kyc/$id'
+      fullPath: '/kyc/$id'
+      preLoaderRoute: typeof KycIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/betting/history': {
       id: '/betting/history'
       path: '/betting/history'
@@ -324,6 +384,9 @@ const rootRouteChildren: RootRouteChildren = {
   ResetRoute: ResetRoute,
   BettingDashboardRoute: BettingDashboardRoute,
   BettingHistoryRoute: BettingHistoryRoute,
+  KycIdRoute: KycIdRoute,
+  KycAllRoute: KycAllRoute,
+  KycPendingRoute: KycPendingRoute,
   PaymentsDashboardRoute: PaymentsDashboardRoute,
   PaymentsHistoryRoute: PaymentsHistoryRoute,
   PaymentsSettlementsRoute: PaymentsSettlementsRoute,
