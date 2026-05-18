@@ -15,6 +15,9 @@ import { Route as MfaRouteImport } from './routes/mfa'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BettingHistoryRouteImport } from './routes/betting.history'
+import { Route as BettingDashboardRouteImport } from './routes/betting.dashboard'
+import { Route as BettingDetailsIdRouteImport } from './routes/betting.details.$id'
 
 const ResetRoute = ResetRouteImport.update({
   id: '/reset',
@@ -46,6 +49,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BettingHistoryRoute = BettingHistoryRouteImport.update({
+  id: '/betting/history',
+  path: '/betting/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BettingDashboardRoute = BettingDashboardRouteImport.update({
+  id: '/betting/dashboard',
+  path: '/betting/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BettingDetailsIdRoute = BettingDetailsIdRouteImport.update({
+  id: '/betting/details/$id',
+  path: '/betting/details/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +72,9 @@ export interface FileRoutesByFullPath {
   '/mfa': typeof MfaRoute
   '/onboarding': typeof OnboardingRoute
   '/reset': typeof ResetRoute
+  '/betting/dashboard': typeof BettingDashboardRoute
+  '/betting/history': typeof BettingHistoryRoute
+  '/betting/details/$id': typeof BettingDetailsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +83,9 @@ export interface FileRoutesByTo {
   '/mfa': typeof MfaRoute
   '/onboarding': typeof OnboardingRoute
   '/reset': typeof ResetRoute
+  '/betting/dashboard': typeof BettingDashboardRoute
+  '/betting/history': typeof BettingHistoryRoute
+  '/betting/details/$id': typeof BettingDetailsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +95,33 @@ export interface FileRoutesById {
   '/mfa': typeof MfaRoute
   '/onboarding': typeof OnboardingRoute
   '/reset': typeof ResetRoute
+  '/betting/dashboard': typeof BettingDashboardRoute
+  '/betting/history': typeof BettingHistoryRoute
+  '/betting/details/$id': typeof BettingDetailsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/mfa' | '/onboarding' | '/reset'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/mfa'
+    | '/onboarding'
+    | '/reset'
+    | '/betting/dashboard'
+    | '/betting/history'
+    | '/betting/details/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/mfa' | '/onboarding' | '/reset'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/mfa'
+    | '/onboarding'
+    | '/reset'
+    | '/betting/dashboard'
+    | '/betting/history'
+    | '/betting/details/$id'
   id:
     | '__root__'
     | '/'
@@ -85,6 +130,9 @@ export interface FileRouteTypes {
     | '/mfa'
     | '/onboarding'
     | '/reset'
+    | '/betting/dashboard'
+    | '/betting/history'
+    | '/betting/details/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +142,9 @@ export interface RootRouteChildren {
   MfaRoute: typeof MfaRoute
   OnboardingRoute: typeof OnboardingRoute
   ResetRoute: typeof ResetRoute
+  BettingDashboardRoute: typeof BettingDashboardRoute
+  BettingHistoryRoute: typeof BettingHistoryRoute
+  BettingDetailsIdRoute: typeof BettingDetailsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +191,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/betting/history': {
+      id: '/betting/history'
+      path: '/betting/history'
+      fullPath: '/betting/history'
+      preLoaderRoute: typeof BettingHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/betting/dashboard': {
+      id: '/betting/dashboard'
+      path: '/betting/dashboard'
+      fullPath: '/betting/dashboard'
+      preLoaderRoute: typeof BettingDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/betting/details/$id': {
+      id: '/betting/details/$id'
+      path: '/betting/details/$id'
+      fullPath: '/betting/details/$id'
+      preLoaderRoute: typeof BettingDetailsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,6 +222,9 @@ const rootRouteChildren: RootRouteChildren = {
   MfaRoute: MfaRoute,
   OnboardingRoute: OnboardingRoute,
   ResetRoute: ResetRoute,
+  BettingDashboardRoute: BettingDashboardRoute,
+  BettingHistoryRoute: BettingHistoryRoute,
+  BettingDetailsIdRoute: BettingDetailsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
