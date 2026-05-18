@@ -1,11 +1,11 @@
 // Mock data réaliste pour la plateforme Monitrix
 
 export const OPERATORS = [
-  { id: "1xbet", name: "1xBet", color: "#1F75FE" },
-  { id: "melbet", name: "Melbet", color: "#FFC700" },
-  { id: "akwabet", name: "Akwabet", color: "#E53935" },
-  { id: "betclic", name: "Betclic", color: "#FF7A00" },
-  { id: "premierbet", name: "PremierBet", color: "#00A859" },
+  { id: "1xbet", name: "1xBet", color: "hsl(var(--chart-1))" },
+  { id: "melbet", name: "Melbet", color: "hsl(var(--chart-2))" },
+  { id: "akwabet", name: "Akwabet", color: "hsl(var(--chart-3))" },
+  { id: "betclic", name: "Betclic", color: "hsl(var(--chart-4))" },
+  { id: "premierbet", name: "PremierBet", color: "hsl(var(--chart-5))" },
 ] as const;
 
 export const PAYMENT_PLATFORMS = [
@@ -30,9 +30,15 @@ export type KycStatus = "Vérifié" | "En attente" | "Rejeté";
 export type AlertSeverity = "low" | "medium" | "high" | "critical";
 export type AlertState = "open" | "acknowledged" | "closed";
 
-function rand(min: number, max: number) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-function pick<T>(arr: readonly T[]): T { return arr[rand(0, arr.length - 1)]; }
-function daysAgo(d: number) { return new Date(Date.now() - d * 86400000).toISOString(); }
+function rand(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function pick<T>(arr: readonly T[]): T {
+  return arr[rand(0, arr.length - 1)];
+}
+function daysAgo(d: number) {
+  return new Date(Date.now() - d * 86400000).toISOString();
+}
 
 // Dashboard KPIs
 export const dashboardKpis = {
@@ -81,24 +87,39 @@ const BET_STATUSES: BetStatus[] = ["Won", "Lost", "Pending", "Cancelled", "Refun
 export const bets = Array.from({ length: 80 }, (_, i) => {
   const stake = rand(500, 250000);
   const status = pick(BET_STATUSES);
-  const payout = status === "Won" ? stake * (rand(15, 50) / 10) : status === "Cashout" ? stake * 0.7 : 0;
+  const payout =
+    status === "Won" ? stake * (rand(15, 50) / 10) : status === "Cashout" ? stake * 0.7 : 0;
   return {
     id: `BET-${100000 + i}`,
     ref: `OP-${rand(10000000, 99999999)}`,
     date: daysAgo(rand(0, 60)),
     operator: pick(OPERATORS),
     clientId: `CL-${rand(10000, 99999)}`,
-    clientName: pick(["Mamadou Diouf","Awa Ndiaye","Cheikh Sarr","Fatou Ba","Ibrahima Sow","Aissatou Fall","Modou Cissé"]),
+    clientName: pick([
+      "Mamadou Diouf",
+      "Awa Ndiaye",
+      "Cheikh Sarr",
+      "Fatou Ba",
+      "Ibrahima Sow",
+      "Aissatou Fall",
+      "Modou Cissé",
+    ]),
     gameType: pick(GAME_TYPES),
     status,
     stake,
     payout: Math.round(payout),
     cashout: status === "Cashout",
-    odds: (rand(110, 800) / 100),
+    odds: rand(110, 800) / 100,
     selections: Array.from({ length: rand(1, 4) }, () => ({
-      event: pick(["PSG vs OM","Real Madrid vs Barça","Sénégal vs Maroc","Lakers vs Celtics","Djokovic vs Alcaraz"]),
-      market: pick(["1X2","Over/Under","Both Teams to Score","Handicap"]),
-      pick: pick(["Home","Draw","Away","Over 2.5","Under 2.5"]),
+      event: pick([
+        "PSG vs OM",
+        "Real Madrid vs Barça",
+        "Sénégal vs Maroc",
+        "Lakers vs Celtics",
+        "Djokovic vs Alcaraz",
+      ]),
+      market: pick(["1X2", "Over/Under", "Both Teams to Score", "Handicap"]),
+      pick: pick(["Home", "Draw", "Away", "Over 2.5", "Under 2.5"]),
       odds: rand(110, 350) / 100,
     })),
   };
@@ -130,7 +151,7 @@ export const payments = Array.from({ length: 80 }, (_, i) => {
     method: pick(["Mobile Money", "Carte bancaire", "Virement", "Crypto"]),
     reference: `REF-${rand(100000000, 999999999)}`,
     processingTime: `${rand(1, 30)}s`,
-    ip: `${rand(10,254)}.${rand(0,254)}.${rand(0,254)}.${rand(0,254)}`,
+    ip: `${rand(10, 254)}.${rand(0, 254)}.${rand(0, 254)}.${rand(0, 254)}`,
     location: pick(["Dakar, SN", "Thiès, SN", "Saint-Louis, SN", "Kaolack, SN", "Ziguinchor, SN"]),
     device: pick(["Android", "iOS", "Web"]),
   };
@@ -168,8 +189,18 @@ const KYC_STATUSES: KycStatus[] = ["Vérifié", "En attente", "Rejeté"];
 
 export const kycUsers = Array.from({ length: 50 }, (_, i) => ({
   id: `USR-${400000 + i}`,
-  fullName: pick(["Mamadou Diouf","Awa Ndiaye","Cheikh Sarr","Fatou Ba","Ibrahima Sow","Aissatou Fall","Modou Cissé","Marieme Diop","Ousmane Ka"]),
-  phone: `+221 7${rand(0,9)} ${rand(100,999)} ${rand(10,99)} ${rand(10,99)}`,
+  fullName: pick([
+    "Mamadou Diouf",
+    "Awa Ndiaye",
+    "Cheikh Sarr",
+    "Fatou Ba",
+    "Ibrahima Sow",
+    "Aissatou Fall",
+    "Modou Cissé",
+    "Marieme Diop",
+    "Ousmane Ka",
+  ]),
+  phone: `+221 7${rand(0, 9)} ${rand(100, 999)} ${rand(10, 99)} ${rand(10, 99)}`,
   email: `user${i}@example.sn`,
   status: pick(KYC_STATUSES),
   documentType: pick(["Carte d'identité", "Passeport", "Permis de conduire"]),
@@ -186,21 +217,45 @@ export const taxKpis = {
   operatorRevenue: 1_727_820_000,
 };
 
-export const monthlyReversements = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"].map((m) => ({
-  month: m,
-  playerWinsTax: rand(40_000_000, 180_000_000),
-  operatorRevenueTax: rand(30_000_000, 120_000_000),
-  total: 0,
-  status: pick(["payée", "en_attente", "payée_automatique", "en_retard"] as const),
-  paymentDate: daysAgo(rand(0, 365)),
-})).map((r) => ({ ...r, total: r.playerWinsTax + r.operatorRevenueTax }));
+export const monthlyReversements = [
+  "Jan",
+  "Fév",
+  "Mar",
+  "Avr",
+  "Mai",
+  "Juin",
+  "Juil",
+  "Août",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Déc",
+]
+  .map((m) => ({
+    month: m,
+    playerWinsTax: rand(40_000_000, 180_000_000),
+    operatorRevenueTax: rand(30_000_000, 120_000_000),
+    total: 0,
+    status: pick(["payée", "en_attente", "payée_automatique", "en_retard"] as const),
+    paymentDate: daysAgo(rand(0, 365)),
+  }))
+  .map((r) => ({ ...r, total: r.playerWinsTax + r.operatorRevenueTax }));
 
 export const invoices = Array.from({ length: 30 }, (_, i) => ({
   id: `INV-${500000 + i}`,
-  month: ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"][i % 12],
+  month: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"][
+    i % 12
+  ],
   operator: pick(OPERATORS),
   amount: rand(20_000_000, 250_000_000),
-  status: pick(["payée_automatique","payée","en_attente","en_attente_de_confirmation","en_retard","annulée"] as const),
+  status: pick([
+    "payée_automatique",
+    "payée",
+    "en_attente",
+    "en_attente_de_confirmation",
+    "en_retard",
+    "annulée",
+  ] as const),
   date: daysAgo(rand(0, 200)),
 }));
 
@@ -208,9 +263,9 @@ export const reversements = Array.from({ length: 25 }, (_, i) => ({
   id: `REV-${600000 + i}`,
   operator: pick(OPERATORS),
   amount: rand(30_000_000, 400_000_000),
-  status: pick(["approuvé","en_attente","rejeté","traité","initié"] as const),
+  status: pick(["approuvé", "en_attente", "rejeté", "traité", "initié"] as const),
   date: daysAgo(rand(0, 120)),
-  bank: pick(["Ecobank — SN0012...","CBAO — SN0045...","SGBS — SN0078..."]),
+  bank: pick(["Ecobank — SN0012...", "CBAO — SN0045...", "SGBS — SN0078..."]),
 }));
 
 // Audit
@@ -225,19 +280,28 @@ export const auditLogs = Array.from({ length: 40 }, (_, i) => ({
   id: `LOG-${700000 + i}`,
   date: daysAgo(rand(0, 30)),
   operator: pick(OPERATORS),
-  type: pick(["Bet audit","Payment audit","KYC review","Limit check"]),
-  agent: pick(["A. Diallo","M. Sy","F. Mbaye"]),
-  result: pick(["OK","Douteux","Suspect","Vérifié"]),
-  note: pick(["Vérification complétée.", "Anomalie sur ratio mise/gain.", "Identité confirmée.", "Document expiré."]),
+  type: pick(["Bet audit", "Payment audit", "KYC review", "Limit check"]),
+  agent: pick(["A. Diallo", "M. Sy", "F. Mbaye"]),
+  result: pick(["OK", "Douteux", "Suspect", "Vérifié"]),
+  note: pick([
+    "Vérification complétée.",
+    "Anomalie sur ratio mise/gain.",
+    "Identité confirmée.",
+    "Document expiré.",
+  ]),
 }));
 
 // Alerts
-const SEVERITIES: AlertSeverity[] = ["low","medium","high","critical"];
-const STATES: AlertState[] = ["open","acknowledged","closed"];
+const SEVERITIES: AlertSeverity[] = ["low", "medium", "high", "critical"];
+const STATES: AlertState[] = ["open", "acknowledged", "closed"];
 
 export const alerts = Array.from({ length: 35 }, (_, i) => ({
   id: `ALT-${800000 + i}`,
-  type: pick(["suspicious_betting_pattern","underage_gambling_attempt","money_laundering_suspicion"] as const),
+  type: pick([
+    "suspicious_betting_pattern",
+    "underage_gambling_attempt",
+    "money_laundering_suspicion",
+  ] as const),
   severity: pick(SEVERITIES),
   state: pick(STATES),
   operator: pick(OPERATORS),
@@ -254,17 +318,40 @@ export const alerts = Array.from({ length: 35 }, (_, i) => ({
 // Documents
 export const documents = Array.from({ length: 18 }, (_, i) => ({
   id: `DOC-${900000 + i}`,
-  name: pick(["Licence opérateur 2025.pdf","Contrat de partenariat.pdf","Rapport conformité Q3.pdf","Audit fiscal annuel.pdf"]),
+  name: pick([
+    "Licence opérateur 2025.pdf",
+    "Contrat de partenariat.pdf",
+    "Rapport conformité Q3.pdf",
+    "Audit fiscal annuel.pdf",
+  ]),
   operator: pick(OPERATORS),
-  type: pick(["Licence","Contrat","Rapport","Audit"]),
+  type: pick(["Licence", "Contrat", "Rapport", "Audit"]),
   size: `${rand(120, 4800)} Ko`,
   uploadedAt: daysAgo(rand(0, 200)),
 }));
 
 // Users (settings)
 export const adminUsers = [
-  { id: "U001", name: "Aminata Diallo", email: "a.diallo@lonase.sn", role: "Admin", status: "Actif" },
+  {
+    id: "U001",
+    name: "Aminata Diallo",
+    email: "a.diallo@lonase.sn",
+    role: "Admin",
+    status: "Actif",
+  },
   { id: "U002", name: "Moussa Sy", email: "m.sy@lonase.sn", role: "Gestionnaire", status: "Actif" },
-  { id: "U003", name: "Fatou Mbaye", email: "f.mbaye@lonase.sn", role: "Analyste", status: "Actif" },
-  { id: "U004", name: "Pape Ndour", email: "p.ndour@lonase.sn", role: "Support", status: "Inactif" },
+  {
+    id: "U003",
+    name: "Fatou Mbaye",
+    email: "f.mbaye@lonase.sn",
+    role: "Analyste",
+    status: "Actif",
+  },
+  {
+    id: "U004",
+    name: "Pape Ndour",
+    email: "p.ndour@lonase.sn",
+    role: "Support",
+    status: "Inactif",
+  },
 ];
