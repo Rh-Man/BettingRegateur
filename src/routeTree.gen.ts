@@ -15,8 +15,13 @@ import { Route as MfaRouteImport } from './routes/mfa'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PaymentsWalletsRouteImport } from './routes/payments.wallets'
+import { Route as PaymentsSettlementsRouteImport } from './routes/payments.settlements'
+import { Route as PaymentsHistoryRouteImport } from './routes/payments.history'
+import { Route as PaymentsDashboardRouteImport } from './routes/payments.dashboard'
 import { Route as BettingHistoryRouteImport } from './routes/betting.history'
 import { Route as BettingDashboardRouteImport } from './routes/betting.dashboard'
+import { Route as PaymentsTransactionsIdRouteImport } from './routes/payments.transactions.$id'
 import { Route as BettingDetailsIdRouteImport } from './routes/betting.details.$id'
 
 const ResetRoute = ResetRouteImport.update({
@@ -49,6 +54,26 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PaymentsWalletsRoute = PaymentsWalletsRouteImport.update({
+  id: '/payments/wallets',
+  path: '/payments/wallets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsSettlementsRoute = PaymentsSettlementsRouteImport.update({
+  id: '/payments/settlements',
+  path: '/payments/settlements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsHistoryRoute = PaymentsHistoryRouteImport.update({
+  id: '/payments/history',
+  path: '/payments/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsDashboardRoute = PaymentsDashboardRouteImport.update({
+  id: '/payments/dashboard',
+  path: '/payments/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BettingHistoryRoute = BettingHistoryRouteImport.update({
   id: '/betting/history',
   path: '/betting/history',
@@ -57,6 +82,11 @@ const BettingHistoryRoute = BettingHistoryRouteImport.update({
 const BettingDashboardRoute = BettingDashboardRouteImport.update({
   id: '/betting/dashboard',
   path: '/betting/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsTransactionsIdRoute = PaymentsTransactionsIdRouteImport.update({
+  id: '/payments/transactions/$id',
+  path: '/payments/transactions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BettingDetailsIdRoute = BettingDetailsIdRouteImport.update({
@@ -74,7 +104,12 @@ export interface FileRoutesByFullPath {
   '/reset': typeof ResetRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
+  '/payments/dashboard': typeof PaymentsDashboardRoute
+  '/payments/history': typeof PaymentsHistoryRoute
+  '/payments/settlements': typeof PaymentsSettlementsRoute
+  '/payments/wallets': typeof PaymentsWalletsRoute
   '/betting/details/$id': typeof BettingDetailsIdRoute
+  '/payments/transactions/$id': typeof PaymentsTransactionsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,7 +120,12 @@ export interface FileRoutesByTo {
   '/reset': typeof ResetRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
+  '/payments/dashboard': typeof PaymentsDashboardRoute
+  '/payments/history': typeof PaymentsHistoryRoute
+  '/payments/settlements': typeof PaymentsSettlementsRoute
+  '/payments/wallets': typeof PaymentsWalletsRoute
   '/betting/details/$id': typeof BettingDetailsIdRoute
+  '/payments/transactions/$id': typeof PaymentsTransactionsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,7 +137,12 @@ export interface FileRoutesById {
   '/reset': typeof ResetRoute
   '/betting/dashboard': typeof BettingDashboardRoute
   '/betting/history': typeof BettingHistoryRoute
+  '/payments/dashboard': typeof PaymentsDashboardRoute
+  '/payments/history': typeof PaymentsHistoryRoute
+  '/payments/settlements': typeof PaymentsSettlementsRoute
+  '/payments/wallets': typeof PaymentsWalletsRoute
   '/betting/details/$id': typeof BettingDetailsIdRoute
+  '/payments/transactions/$id': typeof PaymentsTransactionsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,7 +155,12 @@ export interface FileRouteTypes {
     | '/reset'
     | '/betting/dashboard'
     | '/betting/history'
+    | '/payments/dashboard'
+    | '/payments/history'
+    | '/payments/settlements'
+    | '/payments/wallets'
     | '/betting/details/$id'
+    | '/payments/transactions/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,7 +171,12 @@ export interface FileRouteTypes {
     | '/reset'
     | '/betting/dashboard'
     | '/betting/history'
+    | '/payments/dashboard'
+    | '/payments/history'
+    | '/payments/settlements'
+    | '/payments/wallets'
     | '/betting/details/$id'
+    | '/payments/transactions/$id'
   id:
     | '__root__'
     | '/'
@@ -132,7 +187,12 @@ export interface FileRouteTypes {
     | '/reset'
     | '/betting/dashboard'
     | '/betting/history'
+    | '/payments/dashboard'
+    | '/payments/history'
+    | '/payments/settlements'
+    | '/payments/wallets'
     | '/betting/details/$id'
+    | '/payments/transactions/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,7 +204,12 @@ export interface RootRouteChildren {
   ResetRoute: typeof ResetRoute
   BettingDashboardRoute: typeof BettingDashboardRoute
   BettingHistoryRoute: typeof BettingHistoryRoute
+  PaymentsDashboardRoute: typeof PaymentsDashboardRoute
+  PaymentsHistoryRoute: typeof PaymentsHistoryRoute
+  PaymentsSettlementsRoute: typeof PaymentsSettlementsRoute
+  PaymentsWalletsRoute: typeof PaymentsWalletsRoute
   BettingDetailsIdRoute: typeof BettingDetailsIdRoute
+  PaymentsTransactionsIdRoute: typeof PaymentsTransactionsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -191,6 +256,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/payments/wallets': {
+      id: '/payments/wallets'
+      path: '/payments/wallets'
+      fullPath: '/payments/wallets'
+      preLoaderRoute: typeof PaymentsWalletsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments/settlements': {
+      id: '/payments/settlements'
+      path: '/payments/settlements'
+      fullPath: '/payments/settlements'
+      preLoaderRoute: typeof PaymentsSettlementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments/history': {
+      id: '/payments/history'
+      path: '/payments/history'
+      fullPath: '/payments/history'
+      preLoaderRoute: typeof PaymentsHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments/dashboard': {
+      id: '/payments/dashboard'
+      path: '/payments/dashboard'
+      fullPath: '/payments/dashboard'
+      preLoaderRoute: typeof PaymentsDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/betting/history': {
       id: '/betting/history'
       path: '/betting/history'
@@ -203,6 +296,13 @@ declare module '@tanstack/react-router' {
       path: '/betting/dashboard'
       fullPath: '/betting/dashboard'
       preLoaderRoute: typeof BettingDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments/transactions/$id': {
+      id: '/payments/transactions/$id'
+      path: '/payments/transactions/$id'
+      fullPath: '/payments/transactions/$id'
+      preLoaderRoute: typeof PaymentsTransactionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/betting/details/$id': {
@@ -224,7 +324,12 @@ const rootRouteChildren: RootRouteChildren = {
   ResetRoute: ResetRoute,
   BettingDashboardRoute: BettingDashboardRoute,
   BettingHistoryRoute: BettingHistoryRoute,
+  PaymentsDashboardRoute: PaymentsDashboardRoute,
+  PaymentsHistoryRoute: PaymentsHistoryRoute,
+  PaymentsSettlementsRoute: PaymentsSettlementsRoute,
+  PaymentsWalletsRoute: PaymentsWalletsRoute,
   BettingDetailsIdRoute: BettingDetailsIdRoute,
+  PaymentsTransactionsIdRoute: PaymentsTransactionsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
