@@ -92,7 +92,6 @@ const NAV: NavItem[] = [
   { to: "/dashboard/reports", label: "Rapports", icon: FileBarChart },
   { to: "/dashboard/documents", label: "Documents", icon: FolderOpen },
   { to: "/dashboard/settings", label: "Paramètres", icon: Settings },
-  { to: "/dashboard/profil", label: "Profil", icon: UserCircle },
 ];
 
 const CURRENT_USER = {
