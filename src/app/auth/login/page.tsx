@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   Activity,
@@ -11,7 +12,6 @@ import {
   LockKeyhole,
   Mail,
   RadioTower,
-  Shield,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,8 +34,14 @@ export default function LoginPage() {
         <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-sidebar to-transparent" />
 
         <div className="relative z-10 flex items-center gap-2 px-12 pt-10">
-          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground shadow-lg shadow-sky-950/20">
-            <Shield className="h-5 w-5" />
+          <div className="relative h-10 w-10">
+            <Image
+              src="/logo-small.png"
+              alt="Monitrix Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
           <div>
             <p className="text-lg font-semibold leading-none">Monitrix</p>
@@ -83,15 +89,21 @@ export default function LoginPage() {
         </div>
 
         <p className="relative z-10 px-12 pb-10 text-xs text-sidebar-foreground/50">
-          © 2025 LONASE · Tous droits réservés
+        
         </p>
       </section>
 
       <main className="flex min-h-screen items-center justify-center app-surface p-6 lg:p-12">
         <div className="w-full max-w-[440px]">
           <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <Shield className="h-5 w-5" />
+            <div className="relative h-10 w-10">
+              <Image
+                src="/logo-small.png"
+                alt="Monitrix Logo"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
             <div>
               <p className="text-lg font-semibold leading-none">Monitrix</p>
