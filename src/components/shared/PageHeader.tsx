@@ -233,7 +233,7 @@ export function PageHeader({ title, description, actions }: Props) {
     <div className="flex flex-col gap-4 mb-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70">{title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70">{title}</h1>
           {description && <p className="text-sm font-medium text-muted-foreground mt-1">{description}</p>}
         </div>
         <div className="flex items-center gap-2 shrink-0">
