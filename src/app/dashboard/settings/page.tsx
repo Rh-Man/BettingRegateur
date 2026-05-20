@@ -307,8 +307,6 @@ export default function SettingsPage() {
           <TabsTrigger value="bookmakers" className="rounded-lg font-semibold text-xs py-1.5 px-3">Bookmakers</TabsTrigger>
           <TabsTrigger value="payments" className="rounded-lg font-semibold text-xs py-1.5 px-3">Prestataires</TabsTrigger>
           <TabsTrigger value="regulator" className="rounded-lg font-semibold text-xs py-1.5 px-3">Régulateur</TabsTrigger>
-          <TabsTrigger value="metrics" className="rounded-lg font-semibold text-xs py-1.5 px-3">Métriques</TabsTrigger>
-          <TabsTrigger value="tax" className="rounded-lg font-semibold text-xs py-1.5 px-3">Fiscalité</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="mt-4">
