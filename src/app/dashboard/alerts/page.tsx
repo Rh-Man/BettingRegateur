@@ -26,13 +26,14 @@ const ICONS = {
 } as const;
 
 export default function AlertsPage() {
+  const [alertItems, setAlertItems] = useState(alerts);
   const [q, setQ] = useState("");
   const [sev, setSev] = useState("all");
   const [st, setSt] = useState("all");
 
   const filtered = useMemo(
     () =>
-      alerts.filter(
+      alertItems.filter(
         (a) =>
           (q === "" ||
             a.id.toLowerCase().includes(q.toLowerCase()) ||
@@ -40,8 +41,13 @@ export default function AlertsPage() {
           (sev === "all" || a.severity === sev) &&
           (st === "all" || a.state === st),
       ),
-    [q, sev, st],
+    [alertItems, q, sev, st],
   );
+
+  const updateAlertState = (id: string, state: "acknowledged" | "closed") => {
+    setAlertItems((items) => items.map((item) => (item.id === id ? { ...item, state } : item)));
+    toast.success(state === "acknowledged" ? `${id} pris en charge` : `${id} clôturé`);
+  };
 
   return (
     <div>
@@ -121,14 +127,16 @@ export default function AlertsPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => toast.info(`${a.id} : accusé de réception`)}
+                    disabled={a.state !== "open"}
+                    onClick={() => updateAlertState(a.id, "acknowledged")}
                   >
                     Accuser réception
                   </Button>
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => toast.success(`${a.id} fermé`)}
+                    disabled={a.state === "closed"}
+                    onClick={() => updateAlertState(a.id, "closed")}
                   >
                     Fermer
                   </Button>

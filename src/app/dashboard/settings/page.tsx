@@ -39,14 +39,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+type ProjectType = "betting" | "payment" | "monitoring";
+type AccessLevel = "admin" | "viewer" | "developer";
+type StructuredAccount = {
+  id: string;
+  name: string;
+  email: string;
+  scope_type: "societe";
+  project_type: ProjectType;
+  access_level: AccessLevel;
+  status: string;
+};
+
 export default function SettingsPage() {
-  const [usersList, setUsersList] = useState(adminUsers);
+  const [usersList, setUsersList] = useState<StructuredAccount[]>(adminUsers);
 
   // Add state
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
-  const [newRole, setNewRole] = useState("Analyste");
+  const [newProject, setNewProject] = useState<ProjectType>("betting");
+  const [newRole, setNewRole] = useState<AccessLevel>("viewer");
   const [newStatus, setNewStatus] = useState("Actif");
 
   // Edit state
@@ -54,7 +67,8 @@ export default function SettingsPage() {
   const [editingUser, setEditingUser] = useState<any>(null);
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
-  const [editRole, setEditRole] = useState("Analyste");
+  const [editProject, setEditProject] = useState<ProjectType>("betting");
+  const [editRole, setEditRole] = useState<AccessLevel>("viewer");
   const [editStatus, setEditStatus] = useState("Actif");
 
   // Delete state
@@ -71,7 +85,9 @@ export default function SettingsPage() {
       id: `U00${usersList.length + 1}`,
       name: newName,
       email: newEmail,
-      role: newRole,
+      scope_type: "societe" as const,
+      project_type: newProject,
+      access_level: newRole,
       status: newStatus,
     };
     setUsersList([...usersList, newUser]);
@@ -79,7 +95,8 @@ export default function SettingsPage() {
     setIsAddOpen(false);
     setNewName("");
     setNewEmail("");
-    setNewRole("Analyste");
+    setNewProject("betting");
+    setNewRole("viewer");
     setNewStatus("Actif");
   };
 
@@ -92,7 +109,14 @@ export default function SettingsPage() {
     setUsersList(
       usersList.map((u) =>
         u.id === editingUser.id
-          ? { ...u, name: editName, email: editEmail, role: editRole, status: editStatus }
+          ? {
+              ...u,
+              name: editName,
+              email: editEmail,
+              project_type: editProject,
+              access_level: editRole,
+              status: editStatus,
+            }
           : u
       )
     );
@@ -112,7 +136,8 @@ export default function SettingsPage() {
     setEditingUser(user);
     setEditName(user.name);
     setEditEmail(user.email);
-    setEditRole(user.role);
+    setEditProject(user.project_type);
+    setEditRole(user.access_level);
     setEditStatus(user.status);
     setIsEditOpen(true);
   };
@@ -324,7 +349,7 @@ export default function SettingsPage() {
                   <DialogHeader>
                     <DialogTitle className="text-xl font-bold tracking-tight">Ajouter un utilisateur</DialogTitle>
                     <DialogDescription className="text-xs font-semibold text-muted-foreground">
-                      Créez un profil pour un collaborateur ou régulateur de la plateforme.
+                      Créez un compte opérateur avec un rôle système structuré.
                     </DialogDescription>
                   </DialogHeader>
                   <form onSubmit={handleAdd} className="space-y-4 pt-2">
@@ -351,18 +376,36 @@ export default function SettingsPage() {
                         required
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                       <div className="space-y-1.5">
-                        <Label className="text-xs font-bold text-foreground/80">Rôle</Label>
-                        <Select value={newRole} onValueChange={setNewRole}>
+                        <Label className="text-xs font-bold text-foreground/80">Projet</Label>
+                        <Select
+                          value={newProject}
+                          onValueChange={(value) => setNewProject(value as ProjectType)}
+                        >
+                          <SelectTrigger className="h-10 bg-background/50 border-border/50 rounded-xl text-xs font-semibold">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="betting">Betting</SelectItem>
+                            <SelectItem value="payment">Payment</SelectItem>
+                            <SelectItem value="monitoring">Monitoring</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-bold text-foreground/80">Niveau d’accès</Label>
+                        <Select
+                          value={newRole}
+                          onValueChange={(value) => setNewRole(value as AccessLevel)}
+                        >
                           <SelectTrigger className="h-10 bg-background/50 border-border/50 rounded-xl text-xs font-semibold">
                             <SelectValue placeholder="Choisir" />
                           </SelectTrigger>
                           <SelectContent className="rounded-xl border-border/50 glass-card">
-                            <SelectItem value="Admin" className="font-semibold text-xs rounded-lg">Admin</SelectItem>
-                            <SelectItem value="Gestionnaire" className="font-semibold text-xs rounded-lg">Gestionnaire</SelectItem>
-                            <SelectItem value="Analyste" className="font-semibold text-xs rounded-lg">Analyste</SelectItem>
-                            <SelectItem value="Support" className="font-semibold text-xs rounded-lg">Support</SelectItem>
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="viewer">Viewer</SelectItem>
+                            <SelectItem value="developer">Développeur</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -406,7 +449,8 @@ export default function SettingsPage() {
                     <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4 pl-6">ID</TableHead>
                     <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4">Nom</TableHead>
                     <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4">Email</TableHead>
-                    <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4">Rôle</TableHead>
+                    <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4">Projet</TableHead>
+                    <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4">Accès</TableHead>
                     <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4">Statut</TableHead>
                     <TableHead className="font-bold text-xs uppercase tracking-wider text-muted-foreground/80 py-4 pr-6 text-right">Actions</TableHead>
                   </TableRow>
@@ -417,7 +461,12 @@ export default function SettingsPage() {
                       <TableCell className="font-mono text-xs font-bold text-primary/80 py-4 pl-6">{u.id}</TableCell>
                       <TableCell className="font-bold text-sm text-foreground py-4">{u.name}</TableCell>
                       <TableCell className="text-xs font-medium text-muted-foreground py-4">{u.email}</TableCell>
-                      <TableCell className="text-xs font-bold text-foreground/80 py-4">{u.role}</TableCell>
+                      <TableCell className="text-xs font-medium capitalize text-muted-foreground py-4">
+                        {u.project_type}
+                      </TableCell>
+                      <TableCell className="text-xs font-bold capitalize text-foreground/80 py-4">
+                        {u.access_level}
+                      </TableCell>
                       <TableCell className="py-4">
                         <StatusBadge status={u.status} />
                       </TableCell>
@@ -478,18 +527,36 @@ export default function SettingsPage() {
                       required
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <div className="space-y-1.5">
-                      <Label className="text-xs font-bold text-foreground/80">Rôle</Label>
-                      <Select value={editRole} onValueChange={setEditRole}>
+                      <Label className="text-xs font-bold text-foreground/80">Projet</Label>
+                      <Select
+                        value={editProject}
+                        onValueChange={(value) => setEditProject(value as ProjectType)}
+                      >
+                        <SelectTrigger className="h-10 bg-background/50 border-border/50 rounded-xl text-xs font-semibold">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="betting">Betting</SelectItem>
+                          <SelectItem value="payment">Payment</SelectItem>
+                          <SelectItem value="monitoring">Monitoring</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-bold text-foreground/80">Niveau d’accès</Label>
+                      <Select
+                        value={editRole}
+                        onValueChange={(value) => setEditRole(value as AccessLevel)}
+                      >
                         <SelectTrigger className="h-10 bg-background/50 border-border/50 rounded-xl text-xs font-semibold">
                           <SelectValue placeholder="Choisir" />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl border-border/50 glass-card">
-                          <SelectItem value="Admin" className="font-semibold text-xs rounded-lg">Admin</SelectItem>
-                          <SelectItem value="Gestionnaire" className="font-semibold text-xs rounded-lg">Gestionnaire</SelectItem>
-                          <SelectItem value="Analyste" className="font-semibold text-xs rounded-lg">Analyste</SelectItem>
-                          <SelectItem value="Support" className="font-semibold text-xs rounded-lg">Support</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="viewer">Viewer</SelectItem>
+                          <SelectItem value="developer">Développeur</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
