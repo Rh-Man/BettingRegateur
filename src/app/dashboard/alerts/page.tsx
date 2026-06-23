@@ -1,151 +1,57 @@
 "use client";
 
-import { PageHeader } from "@/components/shared/PageHeader";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/shared/StatusBadge";
-import { OperatorLogo } from "@/components/shared/OperatorLogo";
-import { alerts, OPERATORS } from "@/lib/mock-data";
-import { formatDateTime } from "@/lib/format";
-import { Search, AlertTriangle, ShieldAlert, AlertOctagon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
-const ICONS = {
-  suspicious_betting_pattern: AlertTriangle,
-  underage_gambling_attempt: ShieldAlert,
-  money_laundering_suspicion: AlertOctagon,
-} as const;
+import { AlertTriangle } from "lucide-react";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { StatusBadge } from "@/components/shared/StatusBadge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSession } from "@/hooks/use-session";
+import { listMonitoringAlerts, updateMonitoringAlert, type MonitoringAlert } from "@/lib/domain-api";
+import { formatDateTime } from "@/lib/format";
 
 export default function AlertsPage() {
-  const [alertItems, setAlertItems] = useState(alerts);
-  const [q, setQ] = useState("");
-  const [sev, setSev] = useState("all");
-  const [st, setSt] = useState("all");
+  const session = useSession();
+  const [alerts, setAlerts] = useState<MonitoringAlert[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(0);
+  useEffect(() => {
+    if (!session) return;
+    const controller = new AbortController();
+    listMonitoringAlerts(session, controller.signal).then((response) => setAlerts(response.data.alerts))
+      .catch((reason: unknown) => {
+        if (reason instanceof DOMException && reason.name === "AbortError") return;
+        setError(reason instanceof Error ? reason.message : "Chargement impossible.");
+      }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [refresh, session]);
 
-  const filtered = useMemo(
-    () =>
-      alertItems.filter(
-        (a) =>
-          (q === "" ||
-            a.id.toLowerCase().includes(q.toLowerCase()) ||
-            a.description.toLowerCase().includes(q.toLowerCase())) &&
-          (sev === "all" || a.severity === sev) &&
-          (st === "all" || a.state === st),
-      ),
-    [alertItems, q, sev, st],
-  );
-
-  const updateAlertState = (id: string, state: "acknowledged" | "closed") => {
-    setAlertItems((items) => items.map((item) => (item.id === id ? { ...item, state } : item)));
-    toast.success(state === "acknowledged" ? `${id} pris en charge` : `${id} clôturé`);
+  const act = async (alert: MonitoringAlert, action: "acknowledge" | "close") => {
+    if (!session) return;
+    try {
+      await updateMonitoringAlert(session, alert.id, action);
+      toast.success(action === "acknowledge" ? "Alerte prise en charge" : "Alerte fermée");
+      setRefresh((value) => value + 1);
+    } catch (reason) { toast.error(reason instanceof Error ? reason.message : "Action impossible"); }
   };
 
-  return (
-    <div>
-      <PageHeader title="Alertes" description={`${filtered.length} alertes`} />
-      <Card className="mb-4">
-        <CardContent className="p-4 flex flex-wrap gap-3">
-          <div className="relative flex-1 min-w-[240px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Rechercher..."
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-          <Select value={sev} onValueChange={setSev}>
-            <SelectTrigger className="w-36">
-              <SelectValue placeholder="Sévérité" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Toutes</SelectItem>
-              <SelectItem value="low">Low</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="high">High</SelectItem>
-              <SelectItem value="critical">Critical</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={st} onValueChange={setSt}>
-            <SelectTrigger className="w-36">
-              <SelectValue placeholder="État" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tous états</SelectItem>
-              <SelectItem value="open">Ouvert</SelectItem>
-              <SelectItem value="acknowledged">Pris en charge</SelectItem>
-              <SelectItem value="closed">Clôturé</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardContent>
-      </Card>
-
-      <div className="space-y-3">
-        {filtered.map((a) => {
-          const Icon = ICONS[a.type];
-          return (
-            <Card key={a.id}>
-              <CardContent className="p-4 flex items-start gap-4">
-                <div
-                  className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${
-                    a.severity === "critical"
-                      ? "bg-destructive/15 text-destructive"
-                      : a.severity === "high"
-                        ? "bg-warning/15 text-warning"
-                        : a.severity === "medium"
-                          ? "bg-info/15 text-info"
-                          : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="font-mono text-xs text-muted-foreground">{a.id}</span>
-                    <StatusBadge status={a.severity} />
-                    <StatusBadge status={a.state} />
-                    <div className="flex items-center gap-1.5 ml-2">
-                      <OperatorLogo name={a.operator.name} color={a.operator.color} size={16} />
-                      <span className="text-xs">{a.operator.name}</span>
-                    </div>
-                  </div>
-                  <p className="text-sm font-medium text-foreground">{a.description}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {formatDateTime(a.date)} · Client {a.clientId}
-                  </p>
-                </div>
-                <div className="flex gap-2 shrink-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={a.state !== "open"}
-                    onClick={() => updateAlertState(a.id, "acknowledged")}
-                  >
-                    Accuser réception
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    disabled={a.state === "closed"}
-                    onClick={() => updateAlertState(a.id, "closed")}
-                  >
-                    Fermer
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-    </div>
-  );
+  return <div>
+    <PageHeader title="Alertes" description={`${alerts.length} alerte(s) réelle(s)`} />
+    {error && <Alert variant="destructive" className="mb-4"><AlertTitle>Erreur</AlertTitle><AlertDescription>{error}</AlertDescription></Alert>}
+    {loading ? <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28" />)}</div>
+      : alerts.length ? <div className="space-y-3">{alerts.map((item) => <Card key={item.id}><CardContent className="flex items-start gap-4 p-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-warning/10 text-warning"><AlertTriangle className="h-5 w-5" /></div>
+        <div className="min-w-0 flex-1"><div className="mb-2 flex flex-wrap gap-2"><span className="font-mono text-xs">#{item.id}</span><StatusBadge status={item.severity} /><StatusBadge status={item.state} /></div>
+          <p className="font-medium capitalize">{item.type.replace(/_/g, " ")}</p>
+          <p className="text-sm text-muted-foreground">{item.raison_sociale || item.societe_code || "Périmètre régulateur"} · {formatDateTime(item.created_at)}</p>
+        </div>
+        <div className="flex gap-2"><Button size="sm" variant="outline" disabled={item.state !== "open"} onClick={() => act(item, "acknowledge")}>Prendre en charge</Button><Button size="sm" disabled={item.state === "closed"} onClick={() => act(item, "close")}>Fermer</Button></div>
+      </CardContent></Card>)}</div>
+      : <EmptyState title="Aucune alerte" description="Aucune alerte réelle n’est ouverte." />}
+  </div>;
 }

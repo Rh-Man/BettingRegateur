@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -199,7 +201,7 @@ export function PageHeader({ title, description, actions }: Props) {
     setOperator("all");
     setStatus("all");
     setIsFiltersOpen(false);
-  }, [pathname]);
+  }, [pageType, pathname]);
 
   const handleApply = () => {
     const formattedFrom = dateRange?.from ? format(dateRange.from, "dd/MM/yyyy") : "début";

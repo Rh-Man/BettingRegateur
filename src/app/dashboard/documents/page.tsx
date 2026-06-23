@@ -1,121 +1,47 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { FileText } from "lucide-react";
+import { EmptyState } from "@/components/shared/EmptyState";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { OperatorLogo } from "@/components/shared/OperatorLogo";
-import { documents, OPERATORS } from "@/lib/mock-data";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useSession } from "@/hooks/use-session";
+import { listDocuments, type DocumentRecord } from "@/lib/domain-api";
 import { formatDate } from "@/lib/format";
-import { Upload, Download, Trash2, FileText, Search } from "lucide-react";
 
 export default function DocumentsPage() {
-  return (
-    <div>
-      <PageHeader
-        title="Documents"
-        description={`${documents.length} documents`}
-        actions={
-          <Button size="sm">
-            <Upload className="h-4 w-4 mr-1.5" />
-            Uploader un document
-          </Button>
-        }
-      />
-      <Card className="mb-4">
-        <CardContent className="p-4 flex flex-wrap gap-3">
-          <div className="relative flex-1 min-w-[240px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Rechercher..." className="pl-9" />
-          </div>
-          <Select defaultValue="all">
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Opérateur" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tous</SelectItem>
-              {OPERATORS.map((o) => (
-                <SelectItem key={o.id} value={o.id}>
-                  {o.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select defaultValue="all">
-            <SelectTrigger className="w-36">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tous types</SelectItem>
-              <SelectItem value="Licence">Licence</SelectItem>
-              <SelectItem value="Contrat">Contrat</SelectItem>
-              <SelectItem value="Rapport">Rapport</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Document</TableHead>
-                <TableHead>Opérateur</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Taille</TableHead>
-                <TableHead>Uploadé le</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {documents.map((d) => (
-                <TableRow key={d.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium">{d.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <OperatorLogo name={d.operator.name} color={d.operator.color} size={20} />
-                      <span className="text-sm">{d.operator.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-sm">{d.type}</TableCell>
-                  <TableCell className="text-xs text-muted-foreground">{d.size}</TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
-                    {formatDate(d.uploadedAt)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-7 w-7">
-                      <Download className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive">
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
-  );
+  const session = useSession();
+  const [documents, setDocuments] = useState<DocumentRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    if (!session) return;
+    const controller = new AbortController();
+    listDocuments(session, controller.signal).then((response) => setDocuments(response.data))
+      .catch((reason: unknown) => {
+        if (reason instanceof DOMException && reason.name === "AbortError") return;
+        setError(reason instanceof Error ? reason.message : "Chargement impossible.");
+      }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [session]);
+
+  return <div>
+    <PageHeader title="Documents" description={`${documents.length} document(s) réel(s)`} />
+    {error && <Alert variant="destructive" className="mb-4"><AlertTitle>Erreur</AlertTitle><AlertDescription>{error}</AlertDescription></Alert>}
+    <Card><CardContent className="p-0">
+      {loading ? <div className="space-y-2 p-4">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-12" />)}</div>
+        : documents.length ? <Table><TableHeader><TableRow><TableHead>Document</TableHead><TableHead>Opérateur</TableHead><TableHead>Type</TableHead><TableHead>Taille</TableHead><TableHead>Date</TableHead></TableRow></TableHeader>
+          <TableBody>{documents.map((document) => <TableRow key={document.id}>
+            <TableCell><div className="flex items-center gap-2"><FileText className="h-4 w-4 text-primary" /><span>{document.name || document.path}</span></div></TableCell>
+            <TableCell>{document.raison_sociale}<p className="font-mono text-xs text-muted-foreground">{document.societe_code}</p></TableCell>
+            <TableCell>{document.type}</TableCell>
+            <TableCell>{document.file_size ? `${Math.round(document.file_size / 1024)} Ko` : "Non renseignée"}</TableCell>
+            <TableCell>{formatDate(document.uploaded_at)}</TableCell>
+          </TableRow>)}</TableBody></Table>
+          : <EmptyState title="Aucun document" description="Aucun document réel n’a été transmis." />}
+    </CardContent></Card>
+  </div>;
 }

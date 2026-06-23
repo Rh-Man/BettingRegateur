@@ -38,12 +38,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useSession } from "@/hooks/use-session";
+import { canAccessProject, canWrite } from "@/lib/access";
+import { clearSession } from "@/lib/session";
+import type { ProjectType } from "@/types/auth";
 
 interface NavItem {
   to: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   children?: { to: string; label: string }[];
+  project?: ProjectType;
+  bettingOnly?: boolean;
+  adminOnly?: boolean;
 }
 
 const NAV: NavItem[] = [
@@ -52,6 +59,7 @@ const NAV: NavItem[] = [
     to: "/dashboard/betting/dashboard",
     label: "Paris",
     icon: Dices,
+    project: "betting",
     children: [
       { to: "/dashboard/betting/dashboard", label: "Vue d'ensemble" },
       { to: "/dashboard/betting/history", label: "Historique" },
@@ -61,6 +69,7 @@ const NAV: NavItem[] = [
     to: "/dashboard/payments/dashboard",
     label: "Paiements",
     icon: CreditCard,
+    project: "payment",
     children: [
       { to: "/dashboard/payments/dashboard", label: "Vue d'ensemble" },
       { to: "/dashboard/payments/history", label: "Historique" },
@@ -72,6 +81,7 @@ const NAV: NavItem[] = [
     to: "/dashboard/kyc/all",
     label: "KYC",
     icon: ShieldCheck,
+    bettingOnly: true,
     children: [
       { to: "/dashboard/kyc/all", label: "Tous les utilisateurs" },
       { to: "/dashboard/kyc/pending", label: "En attente" },
@@ -81,6 +91,7 @@ const NAV: NavItem[] = [
     to: "/dashboard/taxes",
     label: "Taxes",
     icon: Receipt,
+    bettingOnly: true,
     children: [
       { to: "/dashboard/taxes", label: "Dashboard" },
       { to: "/dashboard/taxes/liste", label: "Factures" },
@@ -88,24 +99,34 @@ const NAV: NavItem[] = [
     ],
   },
   { to: "/dashboard/audit/logs", label: "Audit", icon: ClipboardList },
-  { to: "/dashboard/alerts", label: "Alertes", icon: Bell },
+  { to: "/dashboard/alerts", label: "Alertes", icon: Bell, project: "monitoring" },
   { to: "/dashboard/reports", label: "Rapports", icon: FileBarChart },
   { to: "/dashboard/documents", label: "Documents", icon: FolderOpen },
-  { to: "/dashboard/settings", label: "Paramètres", icon: Settings },
+  { to: "/dashboard/settings", label: "Paramètres", icon: Settings, adminOnly: true },
 ];
-
-const CURRENT_USER = {
-  name: "Aminata Diallo",
-  email: "a.diallo@lonase.sn",
-  role: "Administratrice",
-  initials: "AD",
-};
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState<Record<string, boolean>>({});
   const [collapsed, setCollapsed] = useState(false);
+  const session = useSession();
+  const visibleNav = NAV.filter((item) => {
+    if (!session) return item.to === "/dashboard";
+    if (item.project && !canAccessProject(session.role, item.project)) return false;
+    if (item.bettingOnly && !canAccessProject(session.role, "betting")) return false;
+    if (item.adminOnly && !canWrite(session.role)) return false;
+    return true;
+  });
+  const userName = [session?.prenom, session?.nom].filter(Boolean).join(" ") || "Régulateur";
+  const initials = userName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const roleLabel =
+    session?.role.access_level === "viewer" ? "Viewer · Lecture seule" : "Administrateur";
 
   const isActive = (to: string) => {
     // Pour le dashboard principal, vérifier l'égalité exacte
@@ -125,7 +146,8 @@ export function Sidebar() {
   };
 
   const handleLogout = () => {
-    router.push("/auth/login");
+    clearSession();
+    router.replace("/auth/login");
   };
 
   return (
@@ -186,7 +208,7 @@ export function Sidebar() {
       {/* Navigation - Scrollable */}
       <TooltipProvider delayDuration={0}>
         <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1 scrollbar-thin scrollbar-thumb-sidebar-border scrollbar-track-transparent">
-          {NAV.map((item) => {
+          {visibleNav.map((item) => {
             const Icon = item.icon;
             const active = isParentActive(item);
             const hasChildren = !!item.children?.length;
@@ -307,7 +329,7 @@ export function Sidebar() {
               >
                 <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-sidebar">
                   <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-sm font-bold shadow-inner">
-                    {CURRENT_USER.initials}
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
               </button>
@@ -318,12 +340,12 @@ export function Sidebar() {
               >
                 <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20 ring-offset-2 ring-offset-sidebar transition-all group-hover:ring-primary/50">
                   <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-sm font-bold shadow-inner">
-                    {CURRENT_USER.initials}
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-bold text-sidebar-foreground group-hover:text-primary transition-colors">{CURRENT_USER.name}</p>
-                  <p className="truncate text-xs font-medium text-sidebar-foreground/50">{CURRENT_USER.role}</p>
+                  <p className="truncate text-sm font-bold text-sidebar-foreground group-hover:text-primary transition-colors">{userName}</p>
+                  <p className="truncate text-xs font-medium text-sidebar-foreground/50">{roleLabel}</p>
                 </div>
                 <ChevronDown className="h-4 w-4 text-sidebar-foreground/50 shrink-0 transition-transform group-hover:text-sidebar-foreground" />
               </button>
@@ -332,9 +354,9 @@ export function Sidebar() {
           <DropdownMenuContent align="end" side="right" className="w-64 rounded-xl border-border/50 shadow-xl glass-card z-50">
             <DropdownMenuLabel className="p-3">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-bold">{CURRENT_USER.name}</p>
+                <p className="text-sm font-bold">{userName}</p>
                 <p className="text-xs font-medium text-muted-foreground">
-                  {CURRENT_USER.email}
+                  {session?.email || "-"}
                 </p>
               </div>
             </DropdownMenuLabel>
