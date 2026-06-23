@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   Building2,
@@ -66,6 +66,7 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const submissionLock = useRef(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [form, setForm] = useState({
     raisonSociale: "",
@@ -123,8 +124,9 @@ export default function SettingsPage() {
 
   const handleCreate = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!session) return;
+    if (!session || submissionLock.current) return;
 
+    submissionLock.current = true;
     setSubmitting(true);
     try {
       await createRegulatorSociety(session, {
@@ -155,6 +157,7 @@ export default function SettingsPage() {
           : "La création a échoué.",
       );
     } finally {
+      submissionLock.current = false;
       setSubmitting(false);
     }
   };
