@@ -102,8 +102,8 @@ export default function PaymentsHistory() {
       />
 
       <Card className="mb-4">
-        <CardContent className="flex flex-wrap items-center gap-3 p-4">
-          <div className="relative min-w-[240px] flex-1">
+        <CardContent className="flex flex-col gap-3 p-4 md:flex-row md:flex-wrap md:items-center">
+          <div className="relative w-full md:min-w-[240px] md:flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="ID transaction, code opérateur..."
@@ -113,7 +113,7 @@ export default function PaymentsHistory() {
             />
           </div>
           <Select value={type} onValueChange={setType}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-full md:w-44">
               <SelectValue placeholder="Type" />
             </SelectTrigger>
             <SelectContent>
@@ -126,7 +126,7 @@ export default function PaymentsHistory() {
             </SelectContent>
           </Select>
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full md:w-40">
               <SelectValue placeholder="Statut" />
             </SelectTrigger>
             <SelectContent>

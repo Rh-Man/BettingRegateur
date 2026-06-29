@@ -233,12 +233,12 @@ export function PageHeader({ title, description, actions }: Props) {
 
   return (
     <div className="flex flex-col gap-4 mb-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70">{title}</h1>
-          {description && <p className="text-sm font-medium text-muted-foreground mt-1">{description}</p>}
+      <div className="flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-start">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 sm:text-3xl">{title}</h1>
+          {description && <p className="mt-1 text-sm font-medium leading-6 text-muted-foreground">{description}</p>}
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-col gap-2 shrink-0 sm:flex-row sm:items-center">
           {pageType !== "none" && (
             <Button
               variant="outline"
@@ -254,7 +254,7 @@ export function PageHeader({ title, description, actions }: Props) {
               <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", isFiltersOpen && "rotate-180")} />
             </Button>
           )}
-          {actions && <div className="flex items-center gap-2">{actions}</div>}
+          {actions && <div className="flex flex-col gap-2 sm:flex-row sm:items-center">{actions}</div>}
         </div>
       </div>
 
@@ -267,7 +267,7 @@ export function PageHeader({ title, description, actions }: Props) {
           )}
         >
           <div className="overflow-hidden">
-            <div className="glass-card border-border/50 rounded-2xl p-5 shadow-xl shadow-primary/5 mt-2 relative overflow-hidden">
+            <div className="glass-card border-border/50 rounded-2xl p-4 shadow-xl shadow-primary/5 mt-2 relative overflow-hidden sm:p-5">
               {/* Ambient Background highlight */}
               <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
               
@@ -279,7 +279,7 @@ export function PageHeader({ title, description, actions }: Props) {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
                 {/* Date Range Picker Popover */}
                 <div className="space-y-2 flex flex-col justify-end">
                   <Label className="text-xs font-bold text-foreground/80">{config.dateLabel}</Label>
@@ -315,7 +315,7 @@ export function PageHeader({ title, description, actions }: Props) {
                         defaultMonth={dateRange?.from}
                         selected={dateRange}
                         onSelect={setDateRange}
-                        numberOfMonths={2}
+                        numberOfMonths={1}
                         locale={fr}
                       />
                     </PopoverContent>
@@ -379,7 +379,7 @@ export function PageHeader({ title, description, actions }: Props) {
               </div>
 
               {/* Filter Actions */}
-              <div className="flex items-center justify-end gap-2 border-t border-border/50 pt-4 mt-5">
+              <div className="flex flex-col gap-2 border-t border-border/50 pt-4 mt-5 sm:flex-row sm:items-center sm:justify-end">
                 <Button
                   variant="ghost"
                   size="sm"

@@ -13,9 +13,13 @@ export default function ProfilPage() {
     <div>
       <PageHeader title="Mon profil" description="Gérez vos informations et votre sécurité." />
       <Tabs defaultValue="info">
-        <TabsList>
-          <TabsTrigger value="info">Informations personnelles</TabsTrigger>
-          <TabsTrigger value="security">Sécurité</TabsTrigger>
+        <TabsList className="h-auto w-full flex-col items-stretch sm:w-auto sm:flex-row">
+          <TabsTrigger value="info" className="justify-center">
+            Informations personnelles
+          </TabsTrigger>
+          <TabsTrigger value="security" className="justify-center">
+            Sécurité
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="info" className="mt-4">
@@ -49,7 +53,7 @@ export default function ProfilPage() {
                 <Input defaultValue="Dakar, SN" />
               </div>
               <div className="md:col-span-2">
-                <Button>Enregistrer</Button>
+                <Button className="w-full sm:w-auto">Enregistrer</Button>
               </div>
             </CardContent>
           </Card>
@@ -74,7 +78,7 @@ export default function ProfilPage() {
                 <Input type="password" />
               </div>
               <div className="md:col-span-3">
-                <Button>Changer le mot de passe</Button>
+                <Button className="w-full sm:w-auto">Changer le mot de passe</Button>
               </div>
             </CardContent>
           </Card>
@@ -83,8 +87,8 @@ export default function ProfilPage() {
             <CardHeader>
               <CardTitle>Authentification à deux facteurs</CardTitle>
             </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div>
+            <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
                 <p className="text-sm font-medium">2FA activé</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   Code à 6 chiffres envoyé par SMS à chaque connexion.

@@ -9,7 +9,7 @@ import { ArrowLeft, Mail } from "lucide-react";
 
 export default function ResetPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center app-surface p-6 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center app-surface p-4 relative overflow-hidden sm:p-6">
       {/* Subtle decorative background elements */}
       <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
@@ -17,9 +17,9 @@ export default function ResetPage() {
       <Card className="w-full max-w-[440px] glass-card border-border/50 shadow-2xl shadow-primary/10 relative overflow-hidden z-10">
         <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
         
-        <CardContent className="p-8 sm:p-10">
+        <CardContent className="p-6 sm:p-10">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tight">Réinitialiser le mot de passe</h1>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Réinitialiser le mot de passe</h1>
             <p className="mt-2.5 text-sm leading-6 text-muted-foreground">
               Entrez votre adresse email et nous vous enverrons un lien pour sécuriser votre compte.
             </p>

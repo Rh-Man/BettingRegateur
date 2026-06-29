@@ -40,13 +40,13 @@ export default function MfaPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center app-surface p-6">
+    <main className="flex min-h-screen items-center justify-center app-surface p-4 sm:p-6">
       <Card className="w-full max-w-md border-border/60 shadow-xl">
-        <CardContent className="p-8">
+        <CardContent className="p-6 sm:p-8">
           <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 text-primary">
             <ShieldCheck className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-semibold">Vérification de première connexion</h1>
+          <h1 className="text-xl font-semibold sm:text-2xl">Vérification de première connexion</h1>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             Saisissez le code à six chiffres envoyé par email. Cette vérification ne sera demandée
             qu’une seule fois.

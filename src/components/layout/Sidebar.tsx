@@ -151,6 +151,50 @@ export function Sidebar() {
   };
 
   return (
+    <>
+    <nav className="fixed inset-x-3 bottom-3 z-40 flex items-center gap-1 overflow-x-auto rounded-2xl border border-sidebar-border/40 bg-sidebar/95 p-2 text-sidebar-foreground shadow-2xl shadow-primary/10 backdrop-blur-xl md:hidden">
+      {visibleNav.map((item) => {
+        const Icon = item.icon;
+        const active = isParentActive(item);
+
+        return (
+          <Link
+            key={item.label}
+            href={item.to}
+            className={cn(
+              "flex min-w-[4.75rem] flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 text-[11px] font-semibold transition-colors",
+              active
+                ? "bg-gradient-to-r from-primary to-accent text-primary-foreground"
+                : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+            )}
+          >
+            <Icon className="h-5 w-5" />
+            <span className="max-w-full truncate">{item.label}</span>
+          </Link>
+        );
+      })}
+      <Link
+        href="/dashboard/profil"
+        className={cn(
+          "flex min-w-[4.75rem] flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 text-[11px] font-semibold transition-colors",
+          pathname === "/dashboard/profil"
+            ? "bg-gradient-to-r from-primary to-accent text-primary-foreground"
+            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+        )}
+      >
+        <UserCircle className="h-5 w-5" />
+        <span className="max-w-full truncate">Profil</span>
+      </Link>
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="flex min-w-[4.75rem] flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 text-[11px] font-semibold text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+      >
+        <LogOut className="h-5 w-5" />
+        <span className="max-w-full truncate">Sortir</span>
+      </button>
+    </nav>
+
     <div className="relative p-6 pr-0 h-screen hidden md:block">
       <aside 
         className={cn(
@@ -380,5 +424,6 @@ export function Sidebar() {
       </div>
       </aside>
     </div>
+    </>
   );
 }

@@ -121,15 +121,15 @@ export default function LoginPage() {
         </p>
       </section>
 
-      <main className="flex min-h-screen items-center justify-center app-surface p-6 lg:p-12">
+      <main className="flex min-h-screen items-center justify-center app-surface p-4 sm:p-6 lg:p-12">
         <Card className="w-full max-w-[440px] border-border/50 shadow-2xl shadow-primary/10">
-          <CardContent className="p-8 sm:p-10">
+          <CardContent className="p-6 sm:p-10">
             <div className="mb-8">
               <p className="mb-4 inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                 <LockKeyhole className="h-3.5 w-3.5" />
                 Accès régulateur
               </p>
-              <h2 className="text-3xl font-bold tracking-tight">Connexion</h2>
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Connexion</h2>
               <p className="mt-2.5 text-sm leading-6 text-muted-foreground">
                 Utilisez les accès transmis par l’administrateur Monitrix.
               </p>

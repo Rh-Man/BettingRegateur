@@ -121,7 +121,7 @@ export function RegulatorActivityDashboard({
         description={description}
         actions={
           <Select value={period} onValueChange={(value) => setPeriod(value as Period)}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -144,14 +144,14 @@ export function RegulatorActivityDashboard({
       )}
 
       {loading ? (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (
             <Skeleton key={index} className="h-36 rounded-md" />
           ))}
         </div>
       ) : (
         <>
-          <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <KPICard
               title="Transactions"
               value={formatNumber(summary?.total_transactions ?? 0)}
@@ -185,7 +185,7 @@ export function RegulatorActivityDashboard({
               </CardHeader>
               <CardContent>
                 {data?.daily_volume.length ? (
-                  <ResponsiveContainer width="100%" height={300}>
+                  <ResponsiveContainer width="100%" height={260}>
                     <BarChart data={data.daily_volume}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis

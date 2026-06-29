@@ -32,7 +32,7 @@ export default function TaxesDashboardPage() {
     {error ? <Alert variant="destructive"><AlertTitle>Erreur</AlertTitle><AlertDescription>{error}</AlertDescription></Alert>
       : !data ? <Skeleton className="h-64" />
       : <>
-        <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <KPICard title="Taxes totales" value={formatXOF(data.kpis.total_tax)} icon={Coins} />
           <KPICard title="Transactions" value={formatNumber(data.kpis.transaction_count)} icon={Rows3} accent="info" />
           <KPICard title="Taux moyen" value={formatPercent(data.kpis.avg_tax_rate)} icon={Percent} accent="warning" />

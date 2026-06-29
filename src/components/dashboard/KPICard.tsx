@@ -42,20 +42,20 @@ export function KPICard({
     <Card className={cn("relative overflow-hidden glass-card glow-hover border-border/50", "group")}>
       <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50 transition-opacity group-hover:opacity-100", accentGradients[accent])} />
       <CardContent className="p-5 relative z-10">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 space-y-1">
             <p className="text-sm font-semibold text-muted-foreground transition-colors group-hover:text-foreground">{title}</p>
-            <p className="text-2xl font-bold tracking-tight text-foreground truncate">{value}</p>
+            <p className="break-words text-xl font-bold leading-tight tracking-tight text-foreground sm:text-2xl">{value}</p>
             {hint && <p className="text-xs font-medium text-muted-foreground">{hint}</p>}
           </div>
           {Icon && (
             <div
               className={cn(
-                "flex h-12 w-12 items-center justify-center rounded-xl shadow-inner transition-transform group-hover:scale-110",
+                "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-inner transition-transform group-hover:scale-110 sm:h-12 sm:w-12",
                 accentMap[accent],
               )}
             >
-              <Icon className="h-6 w-6" />
+              <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
           )}
         </div>

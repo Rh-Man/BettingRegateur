@@ -68,13 +68,13 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center app-surface p-6">
+    <main className="flex min-h-screen items-center justify-center app-surface p-4 sm:p-6">
       <Card className="w-full max-w-md border-border/60 shadow-xl">
-        <CardContent className="p-8">
+        <CardContent className="p-6 sm:p-8">
           <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 text-primary">
             <KeyRound className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-semibold">Créer votre mot de passe</h1>
+          <h1 className="text-xl font-semibold sm:text-2xl">Créer votre mot de passe</h1>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             Remplacez le mot de passe temporaire reçu par email avant d’accéder au portail.
           </p>
